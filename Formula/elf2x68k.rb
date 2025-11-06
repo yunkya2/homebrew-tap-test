@@ -2,7 +2,7 @@ class Elf2x68k < Formula
   desc "X68k cross development environment"
   homepage "https://github.com/yunkya2/elf2x68k"
   url "https://github.com/yunkya2/elf2x68k.git",
-     tag: "20250907"
+     tag: "20251106"
 
   depends_on "wget"
   depends_on "texinfo"
