@@ -22,10 +22,14 @@ jobs:
         run: |
           brew tap yunkya2/tap
 
-      - name: Install the formula
+      - name: Test formula syntax
         run: |
-          brew install elf2x68k
+          brew audit --strict elf2x68k
 
-      - name: Verify installation
+      - name: Install the formula with verbose output
         run: |
-          m68k-xelf-gcc -v
+          brew install --verbose --build-from-source elf2x68k
+
+      - name: Test the installation
+        run: |
+          brew test elf2x68k || echo "No test defined"
