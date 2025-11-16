@@ -20,7 +20,7 @@ jobs:
 
       - name: Tap the repository
         run: |
-          brew tap yunkya2/tap
+          brew tap yunkya2/tap-test
 
       - name: Test formula syntax
         run: |
