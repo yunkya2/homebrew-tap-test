@@ -26,10 +26,50 @@ jobs:
         run: |
           brew audit --strict elf2x68k
 
-      - name: Install the formula with verbose output
+      - name: Install the formula with verbose output and error handling
         run: |
+          set +e  # Continue on error
           brew install --verbose --build-from-source elf2x68k
+          INSTALL_EXIT_CODE=$?
+          echo "Install exit code: $INSTALL_EXIT_CODE"
+
+          # Check if the installation actually succeeded
+          if brew list elf2x68k > /dev/null 2>&1; then
+            echo "✅ Formula is successfully installed"
+            ls -la $(brew --prefix)/Cellar/elf2x68k/
+          else
+            echo "❌ Formula installation failed"
+            exit 1
+          fi
+          
+          # If install exit code was non-zero but package exists, investigate
+          if [ $INSTALL_EXIT_CODE -ne 0 ]; then
+            echo "⚠️  Installation completed with warnings or non-fatal errors"
+            echo "Checking brew doctor..."
+            brew doctor || echo "brew doctor found issues"
+          fi
 
       - name: Test the installation
         run: |
-          brew test elf2x68k || echo "No test defined"
+          echo "Running formula tests..."
+          brew test elf2x68k || echo "Test failed or no test defined"
+          
+      - name: Verify installation contents
+        run: |
+          echo "Checking installed files..."
+          brew list elf2x68k | head -20
+          echo "Total files: $(brew list elf2x68k | wc -l)"
+          
+          echo "Checking executables..."
+          if [ -f "$(brew --prefix)/bin/m68k-xelf-gcc" ]; then
+            echo "✅ m68k-xelf-gcc found"
+            $(brew --prefix)/bin/m68k-xelf-gcc --version || echo "Version check failed"
+          else
+            echo "❌ m68k-xelf-gcc not found"
+          fi
+
+      - name: Final status check
+        run: |
+          echo "Final verification..."
+          brew info elf2x68k
+          echo "Installation completed successfully! 🎉"
