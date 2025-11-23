@@ -1,6 +1,7 @@
 name: Test Brew Formula
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'Formula/**'
