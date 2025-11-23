@@ -54,20 +54,6 @@ jobs:
         run: |
           echo "Running formula tests..."
           brew test elf2x68k || echo "Test failed or no test defined"
-          
-      - name: Verify installation contents
-        run: |
-          echo "Checking installed files..."
-          brew list elf2x68k | head -20
-          echo "Total files: $(brew list elf2x68k | wc -l)"
-          
-          echo "Checking executables..."
-          if [ -f "$(brew --prefix)/bin/m68k-xelf-gcc" ]; then
-            echo "✅ m68k-xelf-gcc found"
-            $(brew --prefix)/bin/m68k-xelf-gcc --version || echo "Version check failed"
-          else
-            echo "❌ m68k-xelf-gcc not found"
-          fi
 
       - name: Final status check
         run: |
