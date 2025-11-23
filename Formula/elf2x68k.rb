@@ -29,7 +29,7 @@ class Elf2x68k < Formula
       }
     EOS
     
-    system bin/"m68k-xelf-gcc", "-c", "test.c", "-o", "test.o"
-    assert_predicate testpath/"test.o", :exist?
+    system bin/"m68k-xelf-gcc", "test.c", "-o", "test.x"
+    assert_predicate testpath/"test.x", :exist?
   end
 end
